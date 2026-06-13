@@ -1,0 +1,175 @@
+/* Services section theme — steel blue / off-white / muted gold on deep navy.
+ *
+ * Activated by [data-section="services"]. Per Stage 4 §6.2 — variables are
+ * spec-pinned. Design direction: calmer and more structured than Shop or
+ * Events; the page should feel like a tradesperson's calendar app. Steel
+ * blue is the working colour; muted gold is reserved for trust-signal
+ * moments (completed-bookings counts, "active" markers).
+ */
+.section-services,
+[data-section="services"] {
+  --section-accent: 2 132 199;             /* steel blue */
+  --section-accent-deep: 7 89 133;
+  --section-highlight: 217 178 65;         /* muted gold */
+  --bg-primary: 11 16 24;
+  --bg-surface: 17 26 40;
+  --bg-surface-2: 28 41 60;
+  --text-primary: 248 250 252;
+  --text-muted: 148 163 184;
+  --border: 30 41 59;
+
+  --brand: 2 132 199;
+  --brand-hover: 7 89 133;
+}
+
+[data-section="services"] .services-bg {
+  background:
+    radial-gradient(900px 360px at 12% -15%, rgb(var(--section-accent) / 0.16), transparent 60%),
+    radial-gradient(640px 300px at 95% 5%, rgb(var(--section-highlight) / 0.07), transparent 60%);
+}
+
+[data-section="services"] .services-hero {
+  background:
+    radial-gradient(1100px 300px at 18% -10%, rgb(var(--section-accent) / 0.28), transparent 60%),
+    radial-gradient(700px 260px at 88% 15%, rgb(var(--section-highlight) / 0.12), transparent 60%);
+}
+
+[data-section="services"] .heading-accent::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgb(var(--section-accent)) 0%, rgb(var(--section-highlight)) 100%);
+}
+
+/* Trust-signal badge — muted gold, deliberately quiet */
+.trust-badge {
+  background: rgb(var(--section-highlight) / 0.12);
+  color: rgb(var(--section-highlight));
+  border: 1px solid rgb(var(--section-highlight) / 0.4);
+}
+
+/* Spirit-level ruler divider — the section's quiet structural signature:
+ * a tradesperson's measuring tape in steel blue with a gold centre mark. */
+.services-divider {
+  position: relative;
+  height: 10px;
+  width: 100%;
+  background:
+    repeating-linear-gradient(90deg,
+      rgb(var(--section-accent) / 0.55) 0 2px, transparent 2px 14px),
+    linear-gradient(90deg, transparent calc(50% - 8px),
+      rgb(var(--section-highlight) / 0.8) calc(50% - 8px),
+      rgb(var(--section-highlight) / 0.8) calc(50% - 6px),
+      transparent calc(50% - 6px));
+  border-top: 1px solid rgb(var(--border));
+  border-bottom: 1px solid rgb(var(--border));
+  opacity: 0.7;
+}
+
+/* ---------------- Availability calendar (buyer-facing read-only) -------- */
+.avail-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.avail-slot {
+  border-radius: 6px;
+  font-size: 11px;
+  padding: 4px 2px;
+  text-align: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: border-color 120ms, background 120ms;
+}
+.avail-slot.free {
+  background: rgb(var(--section-accent) / 0.14);
+  color: rgb(var(--section-accent));
+  border-color: rgb(var(--section-accent) / 0.25);
+}
+.avail-slot.free:hover { border-color: rgb(var(--section-accent)); }
+.avail-slot.free.selected {
+  background: rgb(var(--section-accent));
+  color: rgb(248 250 252);
+}
+.avail-slot.busy {
+  background: rgb(var(--bg-surface-2));
+  color: rgb(var(--text-muted) / 0.55);
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* ---------------- react-big-calendar dark-theme overrides --------------- */
+[data-section="services"] .rbc-calendar { color: rgb(var(--text-primary)); }
+[data-section="services"] .rbc-toolbar button {
+  color: rgb(var(--text-primary));
+  border: 1px solid rgb(var(--border));
+  background: rgb(var(--bg-surface));
+}
+[data-section="services"] .rbc-toolbar button.rbc-active,
+[data-section="services"] .rbc-toolbar button:hover {
+  background: rgb(var(--section-accent) / 0.25);
+  border-color: rgb(var(--section-accent) / 0.6);
+  color: rgb(var(--text-primary));
+}
+[data-section="services"] .rbc-month-view,
+[data-section="services"] .rbc-time-view,
+[data-section="services"] .rbc-agenda-view,
+[data-section="services"] .rbc-header,
+[data-section="services"] .rbc-month-row,
+[data-section="services"] .rbc-day-bg,
+[data-section="services"] .rbc-time-content,
+[data-section="services"] .rbc-time-header-content,
+[data-section="services"] .rbc-timeslot-group,
+[data-section="services"] .rbc-time-slot,
+[data-section="services"] .rbc-day-slot .rbc-time-slot,
+[data-section="services"] .rbc-agenda-table {
+  border-color: rgb(var(--border)) !important;
+}
+[data-section="services"] .rbc-off-range-bg { background: rgb(var(--bg-surface) / 0.6); }
+[data-section="services"] .rbc-today { background: rgb(var(--section-accent) / 0.08); }
+[data-section="services"] .rbc-time-view .rbc-row { min-height: 28px; }
+[data-section="services"] .rbc-label { color: rgb(var(--text-muted)); }
+
+/* Event styling — requested = semi-transparent w/ pulsing border;
+ * confirmed = solid section-accent fill (Stage 4 §6.4). */
+.rbc-event.booking-requested {
+  background: rgb(var(--section-accent) / 0.35);
+  border: 1.5px solid rgb(var(--section-accent));
+  animation: requested-pulse 2s ease-in-out infinite;
+}
+.rbc-event.booking-confirmed {
+  background: rgb(var(--section-accent));
+  border: 1px solid rgb(var(--section-accent-deep));
+}
+.rbc-event.booking-terminal {
+  background: rgb(var(--bg-surface-2));
+  border: 1px solid rgb(var(--border));
+  color: rgb(var(--text-muted));
+}
+@keyframes requested-pulse {
+  0%, 100% { border-color: rgb(var(--section-accent) / 0.9); }
+  50% { border-color: rgb(var(--section-accent) / 0.35); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rbc-event.booking-requested { animation: none; }
+}
+
+/* Availability tint behind day columns (week view); blocks cross-hatched. */
+.rbc-day-slot .availability-tint {
+  background: rgb(var(--section-accent) / 0.06);
+}
+.rbc-event.calendar-block {
+  background: repeating-linear-gradient(45deg,
+    rgb(100 116 139 / 0.35) 0 6px, rgb(100 116 139 / 0.15) 6px 12px);
+  border: 1px dashed rgb(var(--text-muted) / 0.6);
+  color: rgb(var(--text-muted));
+}
+
+/* ---------------- react-day-picker dark overrides ------------------------ */
+[data-section="services"] .rdp-root {
+  --rdp-accent-color: rgb(var(--section-accent));
+  --rdp-accent-background-color: rgb(var(--section-accent) / 0.2);
+  color: rgb(var(--text-primary));
+}
+[data-section="services"] .rdp-day_button:hover {
+  background: rgb(var(--section-accent) / 0.18);
+}

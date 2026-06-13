@@ -1,0 +1,102 @@
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-bgp text-ink font-body antialiased;
+    background:
+      radial-gradient(800px 600px at 12% -10%, rgb(var(--brand) / 0.08), transparent 70%),
+      radial-gradient(600px 500px at 92% 8%, rgb(var(--creators-accent) / 0.07), transparent 70%),
+      rgb(var(--bg-primary));
+    min-height: 100vh;
+  }
+  ::selection {
+    background: rgb(var(--brand) / 0.4);
+    color: rgb(var(--text-primary));
+  }
+  /* Subtle decorative noise overlay across the whole app */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgb(255 255 255 / 0.012) 1px, transparent 1px);
+    background-size: 3px 3px;
+    z-index: 0;
+  }
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight;
+  }
+  a {
+    @apply text-brand hover:text-brand-hover transition-colors;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply mx-auto max-w-6xl px-5 sm:px-8;
+  }
+  .container-narrow {
+    @apply mx-auto max-w-2xl px-5 sm:px-8;
+  }
+  .card {
+    @apply rounded-xl border border-bordr bg-bgs;
+  }
+  .card-hover {
+    @apply hover:border-brand/40 transition-colors;
+  }
+  .input-base {
+    @apply w-full rounded-lg border border-bordr bg-bgs2 px-3.5 py-2.5 text-ink
+           placeholder:text-inkm/70 focus:outline-none focus:ring-2 focus:ring-brand/40
+           focus:border-brand/60 transition;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand
+           px-4 py-2.5 text-sm font-semibold text-[rgb(20_15_8)]
+           hover:bg-brand-hover transition disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-bordr
+           bg-bgs px-4 py-2.5 text-sm font-semibold text-ink hover:border-brand/40
+           hover:bg-bgs2 transition disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 text-sm text-inkm hover:text-ink transition;
+  }
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-danger/40
+           bg-danger/10 px-4 py-2.5 text-sm font-semibold text-danger hover:bg-danger/20 transition;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wider text-inkm;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-bordr
+           bg-bgs2 px-2.5 py-1 text-xs font-medium text-inkm;
+  }
+  /* Section accent helpers */
+  .accent-shop { --section: var(--shop-accent); }
+  .accent-events { --section: var(--events-accent); }
+  .accent-services { --section: var(--services-accent); }
+  .accent-creators { --section: var(--creators-accent); }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: rgb(var(--bg-primary)); }
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--border));
+  border-radius: 8px;
+  border: 2px solid rgb(var(--bg-primary));
+}
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--brand) / 0.6); }
