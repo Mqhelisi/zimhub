@@ -1,0 +1,64 @@
+/* Shop section theme — warm/burnt-orange accent override of base ZimHub tokens.
+ *
+ * Activated by [data-section="shop"] on a wrapper element. Components inside
+ * the wrapper that reference `--brand` will pick up the burnt-orange value
+ * without any code changes.
+ *
+ * The Ndebele-inspired divider is a stylized zigzag using repeated linear
+ * gradients — no SVG asset required.
+ */
+
+[data-section="shop"] {
+  /* Re-bind primary brand vars to the shop accent */
+  --brand: 217 119 6;             /* burnt orange — same as --shop-accent */
+  --brand-hover: 194 105 5;
+
+  /* Slightly warmer surface tint to telegraph "section change" */
+  --bg-surface-warm: 22 17 12;
+}
+
+[data-section="shop"] .shop-warm-surface {
+  background-color: rgb(var(--bg-surface-warm));
+}
+
+/* --- Ndebele-inspired zigzag divider --------------------------------
+ * Repeated triangles in two warm tones. Use as <div className="ndebele-divider" />.
+ * Width follows parent; height fixed at 14px.
+ */
+.ndebele-divider {
+  position: relative;
+  height: 14px;
+  width: 100%;
+  background:
+    linear-gradient(135deg, rgb(217 119 6 / 0.85) 25%, transparent 25%) -10px 0,
+    linear-gradient(225deg, rgb(217 119 6 / 0.85) 25%, transparent 25%) -10px 0,
+    linear-gradient(315deg, rgb(180 83 9 / 0.85) 25%, transparent 25%),
+    linear-gradient(45deg,  rgb(180 83 9 / 0.85) 25%, transparent 25%);
+  background-size: 20px 20px;
+  background-repeat: repeat-x;
+  background-color: transparent;
+  opacity: 0.85;
+}
+
+.ndebele-divider.sm {
+  height: 10px;
+  background-size: 14px 14px;
+}
+
+/* --- Shop hero ---------------------------------------------------- */
+[data-section="shop"] .shop-hero {
+  background:
+    radial-gradient(1200px 320px at 20% -10%, rgb(217 119 6 / 0.18), transparent 60%),
+    radial-gradient(800px 280px at 90% 20%, rgb(180 83 9 / 0.15), transparent 60%);
+}
+
+/* --- Heading accent: subtle warm underline -------------------------- */
+[data-section="shop"] .heading-accent::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgb(var(--brand)) 0%, rgb(217 119 6 / 0) 100%);
+}

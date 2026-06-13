@@ -1,0 +1,113 @@
+/* Events section theme — magenta / electric yellow accent on near-black.
+ *
+ * Activated by [data-section="events"]. Components inside the wrapper that
+ * reference `--brand` will pick up the magenta value.
+ *
+ * Per Stage 3 §6.2:
+ *   --section-accent:    magenta  192 38 211
+ *   --section-highlight: yellow   250 204 21
+ *   --bg-primary deepened to 8 4 14 for a more late-night feel.
+ */
+[data-section="events"] {
+  --brand: 192 38 211;
+  --brand-hover: 168 30 190;
+
+  --section-accent: 192 38 211;
+  --section-highlight: 250 204 21;
+  --section-bg: 8 4 14;
+  --section-bg-2: 18 10 26;
+}
+
+[data-section="events"] body, [data-section="events"] .events-bg {
+  background:
+    radial-gradient(900px 360px at 10% -20%, rgb(var(--section-accent) / 0.20), transparent 60%),
+    radial-gradient(700px 320px at 92% 10%,  rgb(var(--section-highlight) / 0.10), transparent 60%);
+}
+
+/* Mode pill — ticketed vs flyer  */
+.mode-pill-ticketed {
+  background: rgb(var(--section-highlight) / 0.15);
+  color: rgb(var(--section-highlight));
+  border: 1px solid rgb(var(--section-highlight) / 0.45);
+}
+.mode-pill-flyer {
+  background: transparent;
+  color: rgb(var(--section-accent));
+  border: 1px solid rgb(var(--section-accent) / 0.55);
+}
+.mode-pill-cancelled {
+  background: rgb(239 68 68 / 0.15);
+  color: rgb(239 68 68);
+  border: 1px solid rgb(239 68 68 / 0.40);
+}
+
+/* Ndebele-inspired bold-geometric divider in magenta/yellow */
+.events-divider {
+  position: relative;
+  height: 14px;
+  width: 100%;
+  background:
+    linear-gradient(135deg, rgb(var(--section-accent) / 0.85) 25%, transparent 25%) -10px 0,
+    linear-gradient(225deg, rgb(var(--section-accent) / 0.85) 25%, transparent 25%) -10px 0,
+    linear-gradient(315deg, rgb(var(--section-highlight) / 0.85) 25%, transparent 25%),
+    linear-gradient(45deg,  rgb(var(--section-highlight) / 0.85) 25%, transparent 25%);
+  background-size: 20px 20px;
+  background-repeat: repeat-x;
+  background-color: transparent;
+  opacity: 0.85;
+}
+.events-divider.sm {
+  height: 10px;
+  background-size: 14px 14px;
+}
+
+/* Hero gradient for /events landing */
+[data-section="events"] .events-hero {
+  background:
+    radial-gradient(1200px 320px at 20% -10%, rgb(var(--section-accent) / 0.30), transparent 60%),
+    radial-gradient(800px 280px at 90% 20%, rgb(var(--section-highlight) / 0.20), transparent 60%);
+}
+
+[data-section="events"] .heading-accent::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgb(var(--section-accent)) 0%, rgb(var(--section-highlight)) 100%);
+}
+
+/* Event poster: rounded corners + magenta border on hover */
+.event-poster-frame {
+  border: 1px solid rgb(var(--border));
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgb(var(--bg-surface));
+}
+.event-poster-frame:hover {
+  border-color: rgb(var(--section-accent) / 0.7);
+}
+
+/* Gate app — full-bleed full-screen panels */
+.gate-feedback {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.gate-feedback.admit  { background: rgb(34 197 94); color: white; }
+.gate-feedback.already { background: rgb(245 158 11); color: rgb(28 16 0); }
+.gate-feedback.deny   { background: rgb(239 68 68); color: white; }
+
+/* QR display card — extra-thick light background so cameras pick it up */
+.qr-card {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  display: inline-block;
+}
