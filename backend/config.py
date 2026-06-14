@@ -20,21 +20,44 @@ def _bool(value, default=False):
     return str(value).lower() in ('1', 'true', 'yes', 'on')
 
 
+def _normalize_db_url(url):
+    """Render (and some hosts) hand out DATABASE_URL with the legacy
+    ``postgres://`` scheme, which SQLAlchemy 2.0 rejects. Rewrite the prefix
+    while leaving any explicit dialect (e.g. ``postgresql+psycopg2://``) alone.
+    """
+    if url.startswith('postgres://'):
+        return url.replace('postgres://', 'postgresql://', 1)
+    return url
+
+
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL', 'postgresql+psycopg2://postgres:Mqhe2026@localhost:5432/zimhub_dev'
-    )
+    SQLALCHEMY_DATABASE_URI = _normalize_db_url(os.environ.get(
+        'DATABASE_URL', 'postgresql+psycopg2://postgres:postgres@localhost:5432/zimhub_dev'
+    ))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # JWT in httpOnly cookies — see spec §5.1
+    # JWT in httpOnly cookies — see spec §5.1.
+    #
+    # Cross-origin deployment note: on Render (and any setup where the static
+    # site and API live on different sites — onrender.com is on the Public
+    # Suffix List, so each subdomain is its own site for cookies), `Lax` will
+    # cause the browser to accept the Set-Cookie on login but REFUSE to send
+    # it on subsequent XHR/fetch requests. The user appears to log in then
+    # immediately gets 401'd. Set JWT_COOKIE_SAMESITE=None and
+    # JWT_COOKIE_SECURE=true in production (browsers reject SameSite=None
+    # without Secure). Keep Lax + insecure for local dev.
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'dev-jwt-secret-change-me')
     JWT_TOKEN_LOCATION = ['cookies']
     JWT_ACCESS_COOKIE_NAME = 'access_token_cookie'
     JWT_COOKIE_HTTPONLY = True
     JWT_COOKIE_SECURE = _bool(os.environ.get('JWT_COOKIE_SECURE'), default=False)
-    JWT_COOKIE_SAMESITE = 'Lax'
-    JWT_COOKIE_CSRF_PROTECT = False  # We use SameSite=Lax + CORS allowlist; no separate CSRF token this stage.
+    JWT_COOKIE_SAMESITE = os.environ.get('JWT_COOKIE_SAMESITE', 'Lax')
+    # CSRF posture: CORS allowlist + forced preflight on JSON requests
+    # (Content-Type: application/json triggers preflight) is our defence.
+    # SameSite=Lax adds belt-and-braces in dev; SameSite=None in prod removes
+    # that layer, leaving the CORS allowlist as the primary defence.
+    JWT_COOKIE_CSRF_PROTECT = False
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=7)
     JWT_ACCESS_COOKIE_PATH = '/'
 
